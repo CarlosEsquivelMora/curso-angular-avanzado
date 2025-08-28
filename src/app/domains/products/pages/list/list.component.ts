@@ -8,6 +8,7 @@ import { CartService } from '@shared/services/cart.service';
 import { ProductService } from '@shared/services/product.service';
 import { CategoryService } from '@shared/services/category.service';
 import { rxResource } from '@angular/core/rxjs-interop';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-list',
@@ -21,17 +22,12 @@ export default class ListComponent {
   readonly slug = input<string>();
 
   categoriesResource = resource({
-    loader: () => this.categoryService.getAll(),
+    loader: () => firstValueFrom(this.categoryService.getAll()),
   });
 
-  productResource = rxResource({
-    request: () => ({ category_slug: this.slug() }),
-    loader: ({ request }) => this.productService.getProducts(request),
+  productResource = resource({
+    loader: () => firstValueFrom(this.productService.getProducts()),
   });
-
-  addToCart(product: Product) {
-    this.cartService.addToCart(product);
-  }
 
   resetCategories() {
     this.categoriesResource.set([]);
