@@ -21,7 +21,7 @@ export default class ListComponent {
   readonly slug = input<string>();
 
   categoriesResource = resource({
-    loader: () => this.categoryService.getAllPromise(),
+    loader: () => this.categoryService.getAll(),
   });
 
   productResource = rxResource({
